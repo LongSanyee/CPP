@@ -34,7 +34,7 @@ void PhoneBook::add(PhoneBook& book, int& index)
         std::getline(std::cin, str);
         if (std::cin.eof())
             exit(0);
-        if (i == 3 && (!isnotnum(str) || str.empty()))
+        if ((i == 3 && !isnotnum(str)) || str.empty())
             continue;
         if (i == 0)
             book.contacts[index].setfname(str);
@@ -71,11 +71,14 @@ void PhoneBook::search(PhoneBook& Phone)
     std::cout << std::endl;
     while (i < 8)
     {
+        if (!Phone.contacts[i].getfname().empty())
+        {
             std::cout << std::setw(10) << i << "|";
             std::cout << std::setw(10) << truncate(Phone.contacts[i].getfname()) << "|";
             std::cout << std::setw(10) << truncate(Phone.contacts[i].getlname()) << "|";
             std::cout << std::setw(10) << truncate(Phone.contacts[i].getnick());
             std::cout << std::endl;
+        }
         i++;
     }
     i = 0;
