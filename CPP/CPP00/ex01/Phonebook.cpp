@@ -92,19 +92,25 @@ void PhoneBook::search(PhoneBook& Phone)
         if (!isnotnum(str) || (result > 7 || result < 0))
         {
             std::cout << "Invalid Index !" << std::endl;
-            continue;
+            return ;
         }
         else
         {
+            i = 0;
             while (i < 8)
             {
-                if (result == i)
+                if (result == i && !Phone.contacts[i].getfname().empty())
                 {
                     std::cout << "FirstName: " << Phone.contacts[i].getfname() << std::endl;
                     std::cout << "LastName: " << Phone.contacts[i].getlname() << std::endl;
                     std::cout << "NickName: " << Phone.contacts[i].getnick() << std::endl;
                     std::cout << "Number: " << Phone.contacts[i].getnum() << std::endl;
                     std::cout << "DarkestSecret: " << Phone.contacts[i].getdarkest() << std::endl;
+                    return ;
+                }
+                else
+                {
+                    std::cout << "Invalid Index !" << std::endl;
                     return ;
                 }
                 i++;
