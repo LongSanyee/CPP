@@ -6,7 +6,7 @@
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:38:33 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/16 11:46:31 by rammisse         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:23:24 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ class HumanB
 public:
     void attack();
     HumanB(std::string nm);
-    void setWeapon(Weapon club);
+    void setWeapon(Weapon &club);
     std::string getWeapon();
 private:
     std::string name;
-    std::string weapon;
+    Weapon *weapon;
 
 };
 

@@ -6,7 +6,7 @@ C++ = c++
 
 OBJ = $(SRC:.cpp=.o)
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

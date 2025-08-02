@@ -6,7 +6,7 @@
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:05:29 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/10 19:29:58 by rammisse         ###   ########.fr       */
+/*   Updated: 2025/07/22 16:55:51 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #define CONTACT_HPP
 
 #include <iostream>
+#include <cstdlib>
+#include <string>
+#include <cctype>
 
 class Contact
 {

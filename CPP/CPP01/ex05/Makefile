@@ -1,19 +1,19 @@
-NAME = Accounts
+NAME = Harl
 
-SRC = Account.cpp tests.cpp
+SRC = main.cpp Harl.cpp
 
-C++ = g++
-
-OBJ = $(SRC:.cpp=.o)
+C++ = c++
 
 CFLAGS = -Wall -Wextra -Werror
+
+OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(CFLAGS) $(OBJ) -o $@
+	$(C++) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.cpp Account.hpp
+%.o: %.cpp Harl.hpp
 	$(C++) $(CFLAGS) -c $< -o $@
 
 clean:

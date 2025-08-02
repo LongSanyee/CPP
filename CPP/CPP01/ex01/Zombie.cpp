@@ -6,7 +6,7 @@
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:51:13 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/17 14:48:41 by rammisse         ###   ########.fr       */
+/*   Updated: 2025/07/17 15:09:47 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Zombie::Zombie()
 {
-    name = "Reda";
+    name = "Claus";
 }
 
 Zombie::Zombie(std::string name)

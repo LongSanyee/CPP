@@ -21,12 +21,12 @@ int main()
             break ;
         else if (str == "ADD")
         {
-            book.add(book, index);
+            book.add(index);
             index++;
         }
         if (index == 8)
             index = 0;
         if (str == "SEARCH")
-            book.search(book);
+            book.search();
     }
 }

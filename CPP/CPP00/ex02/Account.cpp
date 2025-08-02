@@ -6,7 +6,7 @@
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 19:44:00 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/11 20:15:02 by rammisse         ###   ########.fr       */
+/*   Updated: 2025/07/28 10:49:54 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ int	Account::getNbWithdrawals( void )
 
 Account::Account(int initial_deposit)
 {
-    _nbAccounts++;
     _amount = initial_deposit;
     _totalAmount += _amount;
-    _accountIndex = _nbAccounts - 1;
+    _accountIndex = _nbAccounts;
+    _nbAccounts++;
     _nbDeposits = 0;
     _nbWithdrawals = 0;
     _displayTimestamp();
@@ -57,7 +57,7 @@ void	Account::_displayTimestamp(void)
     std::time_t now = std::time(NULL);
 	std::tm* localTime = std::localtime(&now);
     char buff[30];
-    
+
     std::strftime(buff, sizeof(buff), "%Y%m%d_%H%M%S", localTime);
 	std::cout << "[" << buff << "] ";
 }

@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HumanB.cpp                                         :+:      :+:    :+:   */
+/*   Harl.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/15 12:40:36 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/29 20:23:36 by rammisse         ###   ########.fr       */
+/*   Created: 2025/07/29 20:52:59 by rammisse          #+#    #+#             */
+/*   Updated: 2025/08/01 22:26:39 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "HumanB.hpp"
+#ifndef HARL_HPP
+#define HARL_HPP
 
-std::string HumanB::getWeapon()
+#include <string>
+#include <iostream>
+
+class Harl
 {
-    return (weapon->getType());
-}
+public:
+    void complain(std::string level);
+private:
+    void debug(void);
+    void info(void);
+    void warning(void);
+    void error(void);
+};
 
-void HumanB::attack()
-{
-    std::cout << name << " attacks with their " << getWeapon() << std::endl;
-}
-
-HumanB::HumanB(std::string nm)
-{
-    name = nm;
-}
-
-void HumanB::setWeapon(Weapon &club)
-{
-    weapon = &club;
-}
-
+#endif

@@ -1,20 +1,13 @@
 #include "Phonebook.hpp"
 
-int isnotnum(std::string tmp)
+int isnotnum(int c)
 {
-    int i;
-
-    i = 0;
-    while (tmp[i])
-    {
-        if (!(tmp[i] >= '0' && tmp[i] <= '9'))
-            return (0);
-        i++;
-    }
-    return (1);
+    if (c >= '0' && c <= '9')
+        return (1);
+    return (0);
 }
 
-void PhoneBook::add(PhoneBook& book, int& index)
+void PhoneBook::add(int index)
 {
     std::string str;
     int i = 0;
@@ -34,18 +27,18 @@ void PhoneBook::add(PhoneBook& book, int& index)
         std::getline(std::cin, str);
         if (std::cin.eof())
             exit(0);
-        if ((i == 3 && !isnotnum(str)) || str.empty())
+        if ((i == 3 && !isnotnum(str[0])) || (str.empty()))
             continue;
         if (i == 0)
-            book.contacts[index].setfname(str);
+            this->contacts[index].setfname(str);
         else if (i == 1)
-            book.contacts[index].setlname(str);
+            this->contacts[index].setlname(str);
         else if (i == 2)
-            book.contacts[index].setnickname(str);
+            this->contacts[index].setnickname(str);
         else if (i == 3)
-            book.contacts[index].setphonenumber(str);
+            this->contacts[index].setphonenumber(str);
         else if (i == 4)
-            book.contacts[index].setdarkest(str);
+            this->contacts[index].setdarkest(str);
         i++;
     }
 }
@@ -53,30 +46,30 @@ void PhoneBook::add(PhoneBook& book, int& index)
 std::string truncate(std::string str)
 {
     if (str.length() > 9)
-        return str.substr(0, 8) + ".";
+        return (str.substr(0, 8) + ".");
     else
         return (str);
 }
 
-void PhoneBook::search(PhoneBook& Phone)
+void PhoneBook::search()
 {
     int i = 0;
     int result = 0;
     std::string str;
 
-    std::cout << std::setw(10) <<"INDEX|";
-    std::cout << std::setw(10) <<"First Name|";
-    std::cout << std::setw(10) <<"Last Name|";
-    std::cout << std::setw(10) <<"NickName";
+    std::cout << std::setw(10) << "INDEX|";
+    std::cout << std::setw(10) << "First Name|";
+    std::cout << std::setw(10) << "Last Name|";
+    std::cout << std::setw(10) << "NickName";
     std::cout << std::endl;
     while (i < 8)
     {
-        if (!Phone.contacts[i].getfname().empty())
+        if (!contacts[i].getfname().empty())
         {
             std::cout << std::setw(10) << i << "|";
-            std::cout << std::setw(10) << truncate(Phone.contacts[i].getfname()) << "|";
-            std::cout << std::setw(10) << truncate(Phone.contacts[i].getlname()) << "|";
-            std::cout << std::setw(10) << truncate(Phone.contacts[i].getnick());
+            std::cout << std::setw(10) << truncate(contacts[i].getfname()) << "|";
+            std::cout << std::setw(10) << truncate(contacts[i].getlname()) << "|";
+            std::cout << std::setw(10) << truncate(contacts[i].getnick());
             std::cout << std::endl;
         }
         i++;
@@ -88,24 +81,25 @@ void PhoneBook::search(PhoneBook& Phone)
         std::getline(std::cin, str);
         if (std::cin.eof())
             exit(0);
-        result = std::atoi(str.c_str());
-        if (!isnotnum(str) || (result > 7 || result < 0))
+        if (str.length() > 2 || !isnotnum(str[0]))
         {
-            std::cout << "Invalid Index !" << std::endl;
+            std::cout << "Invalid Index!" << std::endl;
             return ;
         }
         else
         {
+            result = str[0] - '0';
+            std::cout << result << "\n";
             i = 0;
             while (i < 8)
             {
-                if (result == i && !Phone.contacts[i].getfname().empty())
+                if (result == i && !contacts[i].getfname().empty())
                 {
-                    std::cout << "FirstName: " << Phone.contacts[i].getfname() << std::endl;
-                    std::cout << "LastName: " << Phone.contacts[i].getlname() << std::endl;
-                    std::cout << "NickName: " << Phone.contacts[i].getnick() << std::endl;
-                    std::cout << "Number: " << Phone.contacts[i].getnum() << std::endl;
-                    std::cout << "DarkestSecret: " << Phone.contacts[i].getdarkest() << std::endl;
+                    std::cout << "FirstName: " << contacts[i].getfname() << std::endl;
+                    std::cout << "LastName: " << contacts[i].getlname() << std::endl;
+                    std::cout << "NickName: " << contacts[i].getnick() << std::endl;
+                    std::cout << "Number: " << contacts[i].getnum() << std::endl;
+                    std::cout << "DarkestSecret: " << contacts[i].getdarkest() << std::endl;
                     return ;
                 }
                 else

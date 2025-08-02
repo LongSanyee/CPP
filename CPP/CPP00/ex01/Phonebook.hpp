@@ -6,7 +6,7 @@
 /*   By: rammisse <rammisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:54:20 by rammisse          #+#    #+#             */
-/*   Updated: 2025/07/11 13:38:27 by rammisse         ###   ########.fr       */
+/*   Updated: 2025/07/28 09:49:03 by rammisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define PHONEBOOK_HPP
 
 #include <iostream>
+#include <cctype>
 #include <string>
 #include <iomanip>
 #include <cstdlib>
@@ -22,10 +23,11 @@
 
 class PhoneBook
 {
-public:
+private:
     Contact contacts[8];
-    void search(PhoneBook& Phone);
-    void add(PhoneBook& book, int& index);
+public:
+    void search();
+    void add(int index);
 };
 
 

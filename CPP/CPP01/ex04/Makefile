@@ -1,17 +1,17 @@
-NAME = Megaphone
+NAME = Replace
 
-SRC = megaphone.cpp
+SRC = main.cpp
 
 C++ = c++
 
-OBJ = $(SRC:.cpp=.o)
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
-CFLAGS = -Wall -Wextra -Werror
+OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(C++) $(CFLAGS) $(OBJ) -o $@
+	$(C++) $(CFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.cpp
 	$(C++) $(CFLAGS) -c $< -o $@
