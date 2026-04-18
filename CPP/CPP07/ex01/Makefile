@@ -1,19 +1,19 @@
-NAME = Array
-
-C++ = c++
-
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+NAME = Iter
 
 SRC = main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
-all:$(NAME)
+C++ = c++
+
+CFLAGS = -Wall -Wextra -Werror -std=c++98
+
+all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(C++) $(CFLAGS) $(OBJ) -o $@
 
-%.o: %.cpp Array.hpp
+%.o: %.cpp iter.hpp
 	$(C++) $(CFLAGS) -c $< -o $@
 
 clean:
