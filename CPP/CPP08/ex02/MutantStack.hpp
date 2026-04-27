@@ -12,10 +12,22 @@ template <typename T>
 class MutantStack : public std::stack<T>
 {
 public:
-	MutantStack();
-	~MutantStack();
-	MutantStack(const MutantStack& other);
-	MutantStack& operator=(const MutantStack& other);
+	MutantStack()
+	{
+
+	}
+	~MutantStack()
+	{
+
+	}
+	MutantStack(const MutantStack& other)
+	{
+		(void)other;
+	}
+	MutantStack& operator=(const MutantStack& other)
+	{
+		(void)other;
+	}
 
 	typedef typename std::stack<T>::container_type::iterator iterator;
 
