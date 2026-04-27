@@ -23,4 +23,3 @@ MutantStack<T>& MutantStack<T>::operator=(const MutantStack& other)
 {
 
 }
-
