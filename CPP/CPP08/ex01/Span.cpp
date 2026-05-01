@@ -68,18 +68,8 @@ int Span::longestSpan()
 {
     if (vec.size() < 2)
         throw NotEnoughNums();
-    int i = 0;
-    int smallest = vec[0];
-    int biggest = vec[0];
-    while (i < vec.size())
-    {
-        if (vec[i] < smallest)
-            smallest = vec[i];
-        if (vec[i] > biggest)
-            biggest = vec[i];
-        i++;
-    }
-    return biggest - smallest;
+    std::pair<std::vector<int>::iterator,std::vector<int>::iterator> p = std::minmax_element(vec.begin(), vec.end());
+    return p.second - p.first;
 }
 
 void Span::addNumber(std::vector<int>::iterator begin, std::vector<int>::iterator end)
