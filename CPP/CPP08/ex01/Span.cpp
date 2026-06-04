@@ -87,4 +87,5 @@ void Span::print()
         std::cout << *it << std::endl;
         it++;
     }
+    char a<:3:> = "he";
 }
