@@ -29,7 +29,6 @@ public:
 	{
 		(void)other;
 	}
-
 	typedef typename std::stack<T>::container_type::iterator iterator;
 	iterator begin()
 	{

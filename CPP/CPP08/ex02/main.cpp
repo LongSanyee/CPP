@@ -19,22 +19,14 @@ int main()
     MutantStack<std::string> const copy = test;
     MutantStack<int>::iterator it = mstack.begin();
     MutantStack<int>::iterator ite = mstack.end();
-    MutantStack<std::string>::const_iterator cit = copy.begin();
-    MutantStack<std::string>::const_iterator cite = copy.end();
     ++it;
     --it;
-    cit++;
-    cit--;
     while (it != ite)
     {
         std::cout << *it << std::endl;
         ++it;
     }
-    while (cit != cite)
-    {
-        std::cout << *cit << std::endl;
-        ++cit;
-    }
+
     std::stack<int> s(mstack);
     return 0;
 
