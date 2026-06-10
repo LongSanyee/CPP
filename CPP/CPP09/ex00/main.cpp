@@ -8,8 +8,6 @@ int main(int ac, char **av)
     try
     {
         BitcoinExchange var(av[1]);
-        var.ParseDB();
-
     }
     catch (std::exception& e)
     {

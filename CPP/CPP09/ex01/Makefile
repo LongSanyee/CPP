@@ -1,6 +1,6 @@
-NAME = BitcoinExchange
+NAME = RPN
 
-SRC = main.cpp BitcoinExchange.cpp
+SRC = main.cpp RPN.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -13,7 +13,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(C++) $(CFLAGS) $(OBJ) -o $@
 
-%.o: %.cpp BitcoinExchange.hpp
+%.o: %.cpp RPN.hpp
 	$(C++) $(CFLAGS) -c $< -o $@
 
 clean:

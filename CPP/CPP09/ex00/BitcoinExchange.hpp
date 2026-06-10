@@ -3,9 +3,11 @@
 
 
 #include <cstdlib>
+#include <string>
 #include <vector>
 #include <map>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 
 class BitcoinExchange
@@ -23,10 +25,12 @@ public:
             return "Error: could not open file";
         }
     };
-    int isvalidformat(std::string format);
+    int isvalidformat(std::string &format);
     void ParseDB();
     int isleapyear(int y);
     int isfullmonth(int month);
+    void InputValidator(std::ifstream &file);
+    std::vector<std::string> split(std::string t, char c);
 private:
     std::map<std::string, double> map;
 };
