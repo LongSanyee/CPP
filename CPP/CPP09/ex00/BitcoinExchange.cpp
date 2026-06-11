@@ -188,9 +188,12 @@ std::vector<std::string> BitcoinExchange::split(std::string t, char c)
 
     while ((pos = t.find(c, start)) != std::string::npos)
     {
-        arr.push_back(t.substr(start, pos - start));
+        if (pos - start > 0)
+            arr.push_back(t.substr(start, pos - start));
         start = pos + 1;
     }
-    arr.push_back(t.substr(start));
+    std::string tmp = t.substr(start);
+    if (!tmp.empty())
+        arr.push_back(t.substr(start));
     return arr;
 }
