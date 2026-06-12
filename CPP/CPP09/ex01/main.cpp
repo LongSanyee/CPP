@@ -9,8 +9,8 @@ int main(int ac, char **av)
 
         RPN v(av[1]);
     }
-    catch(...)
+    catch(std::exception &e)
     {
-        std::cout << "error" << std::endl;
+        std::cerr << e.what() << std::endl;
     }
 }

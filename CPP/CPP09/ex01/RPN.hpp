@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
 
 class RPN
 {
@@ -14,7 +15,7 @@ public:
     RPN(const RPN& copy);
     RPN &operator=(const RPN& other);
     RPN(char *str);
-    std::vector<std::string> split(std::string t, char c);
+    void doop(std::string t);
 private:
     std::stack<int> arr;
 };
