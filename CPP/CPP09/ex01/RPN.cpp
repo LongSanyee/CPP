@@ -13,7 +13,6 @@ RPN::~RPN()
 RPN::RPN(const RPN& copy)
 {
     (void)copy;
-
 }
 
 RPN& RPN::operator=(const RPN& other)
