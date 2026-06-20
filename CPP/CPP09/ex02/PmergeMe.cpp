@@ -54,31 +54,39 @@ std::vector<int> jacobsthal(int size)
     return seq;
 }
 
-void PmergeMe::Sortvec(std::vector<int> &pairs, size_t blocksize)
+void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
 {
-    if (pairs.size() < 2 * blocksize)
-        return;
-    for (size_t i = 0; i + 2 * blocksize <= pairs.size(); i+= 2 * blocksize)
+    if (t.size() < 2)
+        return ;
+    bool isodd = t.size() % 2 != 0;
+    std::vector<int> straggler;
+    std::vector<std::vector<int>> nextlevel;
+    if (isodd)
     {
-        size_t leftidx = i + blocksize - 1;
-        size_t rightidx = i + 2 * blocksize - 1;
-        
-        if (pairs[leftidx] > pairs[rightidx])
-        {
-            for (size_t j = 0; j < blocksize; ++j)
-            {
-                std::swap(pairs[i + j], pairs[i + blocksize + j]);
-            }
-        }
+        straggler = t.back();
+        t.pop_back();
     }
-    Sortvec(pairs, blocksize * 2);
+    for (size_t i = 0; i < t.size(); i+= 2)
+    {
+        
+    }
 }
 
 void PmergeMe::Fordalg(std::vector<int> &v)
 {
     if (v.size() < 2)
         return ;
-    Sortvec(v, 1);
+    std::vector<std::vector<int>> arr;
+    for (size_t i = 0; i < v.size(); i++)
+    {
+        arr.push_back({v[i]});
+    }
+    Sortvec(arr);
+    v.clear();
+    for (size_t i = 0; i < arr.size(); i++)
+    {
+        v.push_back(arr[i].front());
+    }
 }
 
 void PmergeMe::Fordalg(std::deque<int> &d)

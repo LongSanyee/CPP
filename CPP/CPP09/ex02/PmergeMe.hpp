@@ -26,7 +26,7 @@ public:
 private:
     std::vector<int> vec;
     std::deque<int> deq;
-    void Sortvec(std::vector<int> &pairs, size_t blocksize );
+    void Sortvec(std::vector<std::vector<int>> &t);
 };
 
 
