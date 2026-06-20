@@ -54,36 +54,31 @@ std::vector<int> jacobsthal(int size)
     return seq;
 }
 
+void PmergeMe::Sortvec(std::vector<int> &pairs, size_t blocksize)
+{
+    if (pairs.size() < 2 * blocksize)
+        return;
+    for (size_t i = 0; i + 2 * blocksize <= pairs.size(); i+= 2 * blocksize)
+    {
+        size_t leftidx = i + blocksize - 1;
+        size_t rightidx = i + 2 * blocksize - 1;
+        
+        if (pairs[leftidx] > pairs[rightidx])
+        {
+            for (size_t j = 0; j < blocksize; ++j)
+            {
+                std::swap(pairs[i + j], pairs[i + blocksize + j]);
+            }
+        }
+    }
+    Sortvec(pairs, blocksize * 2);
+}
+
 void PmergeMe::Fordalg(std::vector<int> &v)
 {
     if (v.size() < 2)
         return ;
-    int straggler = 0;
-    bool isodd = v.size() % 2 != 0;
-    if (isodd)
-    {
-        straggler = v.back();
-        v.pop_back();
-    }
-    int i = 0;
-    std::vector<std::pair<int, int>> pairs;
-    std::vector<int> winners;
-    while (i < v.size())
-    {
-        std::pair<int, int> tmp;
-        if (v[i] > v[i + 1])
-        {
-            tmp = std::make_pair(v[i], v[i + 1]);
-            pairs.push_back(tmp);
-        }
-        else
-        {
-            tmp = std::make_pair(v[i + 1], v[i]);
-            pairs.push_back(tmp);
-        }
-        winners.push_back(tmp.first);
-        i += 2;
-    }
+    Sortvec(v, 1);
 }
 
 void PmergeMe::Fordalg(std::deque<int> &d)
