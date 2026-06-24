@@ -66,11 +66,44 @@ void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
         straggler = t.back();
         t.pop_back();
     }
-    for (size_t i = 0; i < t.size(); i+= 2)
+    for (size_t i = 0; i < t.size(); i += 2)
     {
-        
+        if (t[i].back() > t[i + 1].back())
+        {
+            std::vector<int> combined = t[i + 1];
+            combined.insert(combined.end(), t[i].begin(), t[i].end());
+            nextlevel.push_back(combined);
+        }
+        else
+        {
+            std::vector<int> combined = t[i];
+            combined.insert(combined.end(), t[i + 1].begin(), t[i + 1].end());
+            nextlevel.push_back(combined);
+        }
     }
+    Sortvec(nextlevel);
+    std::vector<std::vector<int>> mainchain;
+    std::vector<std::vector<int>> pend;
+    for (size_t i = 0; i < nextlevel.size(); i++)
+    {
+        size_t half = nextlevel[i].size() / 2;
+        std::vector<int> winner(nextlevel[i].begin(), nextlevel[i].begin() + half);
+        std::vector<int> loser(nextlevel[i].begin() + half, nextlevel[i].end());
+        if (i == 0)
+        {
+            mainchain.push_back(loser);
+            mainchain.push_back(winner);
+        }
+        else
+        {
+            pend.push_back(loser);
+            mainchain.push_back(winner);
+        }
+        if (isodd)
+            pend.push_back(straggler);
+    }  
 }
+
 
 void PmergeMe::Fordalg(std::vector<int> &v)
 {
