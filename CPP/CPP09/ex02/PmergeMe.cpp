@@ -99,9 +99,19 @@ void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
             pend.push_back(loser);
             mainchain.push_back(winner);
         }
-        if (isodd)
-            pend.push_back(straggler);
-    }  
+    }
+    if (isodd)
+        pend.push_back(straggler);
+    std::vector<int> jacob = jacobsthal(pend.size() - 1);
+    std::vector<std::vector<int>> fakechain = mainchain;
+    for (size_t i = 0; i < jacob.size(); i++)
+    {
+        size_t tmp = jacob[i];
+        for (;tmp >= 0; tmp--)
+        {
+            
+        }
+    }
 }
 
 
