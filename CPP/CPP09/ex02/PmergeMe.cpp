@@ -13,7 +13,7 @@ PmergeMe::~PmergeMe()
 PmergeMe::PmergeMe(const PmergeMe &other)
 {
 
-}
+}   
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
@@ -32,24 +32,15 @@ int valid(char *c)
     return 1;
 }
 
-std::vector<int> jacobsthal(int size)
+std::vector<size_t> jacobsthal(int size)
 {
-    std::vector<int> seq;
-    int prev = 0; 
-    int curr = 1; 
-    int next = 0;
-    while (next < size)
+    std::vector<size_t> seq;
+    seq.push_back(0);
+    seq.push_back(1);
+    while (seq.size() < size)
     {
-        next = curr + 2 * prev;
-        if (next > 1)
-        {
-            if (next > size)
-                seq.push_back(size);
-            else
-                seq.push_back(next);
-        }
-        prev = curr;
-        curr = next;
+        size_t next = seq[seq.size() - 1] + 2 * seq[seq.size() - 2];
+        seq.push_back(next);
     }
     return seq;
 }
@@ -102,15 +93,11 @@ void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
     }
     if (isodd)
         pend.push_back(straggler);
-    std::vector<int> jacob = jacobsthal(pend.size() - 1);
+    std::vector<size_t> jacob = jacobsthal(pend.size() - 1);
     std::vector<std::vector<int>> fakechain = mainchain;
     for (size_t i = 0; i < jacob.size(); i++)
     {
-        size_t tmp = jacob[i];
-        for (;tmp >= 0; tmp--)
-        {
-            
-        }
+        
     }
 }
 
