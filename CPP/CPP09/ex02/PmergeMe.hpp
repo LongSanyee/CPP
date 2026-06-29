@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <iostream>
 #include <queue>
 
 class PmergeMe
@@ -22,11 +24,12 @@ public:
         }
     };
     void Fordalg(std::vector<int> &v);
-    void Fordalg(std::deque<int> &d);
+    void Fordalg(std::deque<int> &t);
 private:
     std::vector<int> vec;
     std::deque<int> deq;
-    void Sortvec(std::vector<std::vector<int>> &t);
+    void Sortvec(std::vector<std::vector<int> > &t);
+    void Sortdeq(std::deque<std::deque<int> > &t);
 };
 
 

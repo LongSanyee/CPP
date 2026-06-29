@@ -12,12 +12,13 @@ PmergeMe::~PmergeMe()
 
 PmergeMe::PmergeMe(const PmergeMe &other)
 {
-
+    (void)other;
 }   
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
-
+    (void)other;
+    return *this;
 }
 
 int valid(char *c)
@@ -32,26 +33,23 @@ int valid(char *c)
     return 1;
 }
 
-std::vector<size_t> jacobsthal(int size)
+bool cmp(const std::vector<int>& a, const std::vector<int>& b) 
 {
-    std::vector<size_t> seq;
-    seq.push_back(0);
-    seq.push_back(1);
-    while (seq.size() < size)
-    {
-        size_t next = seq[seq.size() - 1] + 2 * seq[seq.size() - 2];
-        seq.push_back(next);
-    }
-    return seq;
+    return a.back() < b.back();
 }
 
-void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
+bool comp(const std::deque<int>& a, const std::deque<int>& b) 
+{
+    return a.back() < b.back();
+}
+
+void PmergeMe::Sortvec(std::vector<std::vector<int> > &t)
 {
     if (t.size() < 2)
         return ;
     bool isodd = t.size() % 2 != 0;
     std::vector<int> straggler;
-    std::vector<std::vector<int>> nextlevel;
+    std::vector<std::vector<int> > nextlevel;
     if (isodd)
     {
         straggler = t.back();
@@ -73,13 +71,13 @@ void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
         }
     }
     Sortvec(nextlevel);
-    std::vector<std::vector<int>> mainchain;
-    std::vector<std::vector<int>> pend;
+    std::vector<std::vector<int> > mainchain;
+    std::vector<std::vector<int> > pend;
     for (size_t i = 0; i < nextlevel.size(); i++)
     {
         size_t half = nextlevel[i].size() / 2;
-        std::vector<int> winner(nextlevel[i].begin(), nextlevel[i].begin() + half);
-        std::vector<int> loser(nextlevel[i].begin() + half, nextlevel[i].end());
+        std::vector<int> loser(nextlevel[i].begin(), nextlevel[i].begin() + half);
+        std::vector<int> winner(nextlevel[i].begin() + half, nextlevel[i].end());
         if (i == 0)
         {
             mainchain.push_back(loser);
@@ -93,35 +91,168 @@ void PmergeMe::Sortvec(std::vector<std::vector<int>> &t)
     }
     if (isodd)
         pend.push_back(straggler);
-    std::vector<size_t> jacob = jacobsthal(pend.size() - 1);
-    std::vector<std::vector<int>> fakechain = mainchain;
-    for (size_t i = 0; i < jacob.size(); i++)
+    if (pend.empty()) 
     {
-        
+        t = mainchain;
+        return;
     }
+    std::vector<size_t> jacob;
+    jacob.push_back(0);
+    jacob.push_back(1);
+    size_t j_idx = 2;
+    while (true)
+    {
+        jacob.push_back(jacob[j_idx - 1] + 2 * jacob[j_idx - 2]);
+        if (jacob.back() > pend.size()) 
+            break;
+        j_idx++;
+    }
+    std::vector<std::vector<int> > fakechain = mainchain;
+    for (size_t i = 3; i < jacob.size(); i++)
+    {
+        int start = jacob[i] - 2;
+        int end = jacob[i - 1] - 1;
+        if (start >= static_cast<int>(pend.size()))
+            start = pend.size() - 1;
+        while (start >= end)
+        {
+            std::vector<std::vector<int> >::iterator it = mainchain.end();
+            if (!(isodd && start == static_cast<int>(pend.size() - 1)))
+                it = std::find(mainchain.begin(), mainchain.end(), fakechain[start + 2]);
+            std::vector<std::vector<int> >::iterator insert;
+            insert = std::upper_bound(mainchain.begin(), it, pend[start], cmp);
+            mainchain.insert(insert, pend[start]);
+            start--;
+        }
+    }
+    t = mainchain;
 }
 
+void PmergeMe::Sortdeq(std::deque<std::deque<int> > &t)
+{
+    if (t.size() < 2)
+        return ;
+    bool isodd = t.size() % 2 != 0;
+    std::deque<int> straggler;
+    std::deque<std::deque<int> > nextlevel;
+    if (isodd)
+    {
+        straggler = t.back();
+        t.pop_back();
+    }
+    for (size_t i = 0; i < t.size(); i += 2)
+    {
+        if (t[i].back() > t[i + 1].back())
+        {
+            std::deque<int> combined = t[i + 1];
+            combined.insert(combined.end(), t[i].begin(), t[i].end());
+            nextlevel.push_back(combined);
+        }
+        else
+        {
+            std::deque<int> combined = t[i];
+            combined.insert(combined.end(), t[i + 1].begin(), t[i + 1].end());
+            nextlevel.push_back(combined);
+        }
+    }
+    Sortdeq(nextlevel);
+    std::deque<std::deque<int> > mainchain;
+    std::deque<std::deque<int> > pend;
+    for (size_t i = 0; i < nextlevel.size(); i++)
+    {
+        size_t half = nextlevel[i].size() / 2;
+        std::deque<int> loser(nextlevel[i].begin(), nextlevel[i].begin() + half);
+        std::deque<int> winner(nextlevel[i].begin() + half, nextlevel[i].end());
+        if (i == 0)
+        {
+            mainchain.push_back(loser);
+            mainchain.push_back(winner);
+        }
+        else
+        {
+            pend.push_back(loser);
+            mainchain.push_back(winner);
+        }
+    }
+    if (isodd)
+        pend.push_back(straggler);
+    if (pend.empty()) 
+    {
+        t = mainchain;
+        return;
+    }
+    std::deque<size_t> jacob;
+    jacob.push_back(0);
+    jacob.push_back(1);
+    size_t j_idx = 2;
+    while (true)
+    {
+        jacob.push_back(jacob[j_idx - 1] + 2 * jacob[j_idx - 2]);
+        if (jacob.back() > pend.size()) 
+            break;
+        j_idx++;
+    }
+    std::deque<std::deque<int> > fakechain = mainchain;
+    for (size_t i = 3; i < jacob.size(); i++)
+    {
+        int start = jacob[i] - 2;
+        int end = jacob[i - 1] - 1;
+        if (start >= static_cast<int>(pend.size()))
+            start = pend.size() - 1;
+        while (start >= end)
+        {
+            std::deque<std::deque<int> >::iterator it = mainchain.end();
+            if (!(isodd && start == static_cast<int>(pend.size() - 1)))
+                it = std::find(mainchain.begin(), mainchain.end(), fakechain[start + 2]);
+            std::deque<std::deque<int> >::iterator insert;
+            insert = std::upper_bound(mainchain.begin(), it, pend[start], comp);
+            mainchain.insert(insert, pend[start]);
+            start--;
+        }
+    }
+    t = mainchain;
+}
 
 void PmergeMe::Fordalg(std::vector<int> &v)
 {
     if (v.size() < 2)
         return ;
-    std::vector<std::vector<int>> arr;
+    std::vector<std::vector<int> > arr;
     for (size_t i = 0; i < v.size(); i++)
     {
-        arr.push_back({v[i]});
+        std::vector<int> tmp;
+        tmp.push_back(v[i]);
+        arr.push_back(tmp);
+        tmp.clear();
     }
     Sortvec(arr);
     v.clear();
     for (size_t i = 0; i < arr.size(); i++)
     {
         v.push_back(arr[i].front());
+        std::cout << v[i] << std::endl;
     }
 }
 
-void PmergeMe::Fordalg(std::deque<int> &d)
+void PmergeMe::Fordalg(std::deque<int> &t)
 {
-
+    if (t.size() < 2)
+        return ;
+    std::deque<std::deque<int> > arr;
+    for (size_t i = 0; i < t.size(); i++)
+    {
+        std::deque<int> tmp;
+        tmp.push_back(t[i]);
+        arr.push_back(tmp);
+        tmp.clear();
+    }
+    Sortdeq(arr);
+    t.clear();
+    for (size_t i = 0; i < arr.size(); i++)
+    {
+        t.push_back(arr[i].front());
+        std::cout << "deq : " << t[i] << std::endl;
+    }
 }
 
 PmergeMe::PmergeMe(char **argv)
@@ -142,4 +273,6 @@ PmergeMe::PmergeMe(char **argv)
         deq.push_back(static_cast<int>(num));
         i++;
     }
+    Fordalg(vec);
+    Fordalg(deq);
 }
