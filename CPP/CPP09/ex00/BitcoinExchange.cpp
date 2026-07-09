@@ -12,12 +12,14 @@ BitcoinExchange::~BitcoinExchange()
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &copy)
 {
-    (void)copy;
+    if (this != &copy)
+        this->map = copy.map;
 }
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &copy)
 {
-    (void)copy;
+    if (this != &copy)
+        this->map = copy.map;
     return *this;
 }
 
@@ -101,29 +103,27 @@ void BitcoinExchange::InputValidator(std::ifstream &file)
         }
         char *endptr;
         double num = std::strtod(arr[1].c_str(), &endptr);
-        if (endptr == arr[1].c_str())
-        {
-            std::cout << "Error: bad input => " << arr[1] << std::endl;
-            continue;
-        }
         while (*endptr != '\0' && std::isspace(*endptr))
             endptr++;
-        if (num < 0)
+        if (num < 0 || num > 1000)
         {
-            std::cout << "Error: not a positive number." << std::endl;
-            continue;
-        }
-        if ((num > 1000 || num < 0))
-        {
-            std::cout << "Error: too large a number." << std::endl;
-            continue;
+            if (num < 0)
+            {
+                std::cout << "Error: not a positive number." << std::endl;
+                continue;
+            }
+            else
+            {
+                std::cout << "Error: too large a number." << std::endl;
+                continue;
+            }
         }
         if (*endptr != '\0')
         {
             std::cout << "Error: bad input => " << arr[1] << std::endl;
             continue;
         }
-        std::map<std::string, double>::iterator it = map.lower_bound(arr[0]);
+        std::map<std::string, double>::iterator it = map.upper_bound(arr[0]);
         if (it == map.begin())
         {
             std::cout << "Error: No match for date in database" << std::endl;
@@ -147,6 +147,7 @@ BitcoinExchange::BitcoinExchange(std::string file)
 
 void BitcoinExchange::ParseDB()
 {
+    errno = 0;
     std::ifstream read("data.csv");;
     if (!read.is_open())
         throw BitcoinExchange::FileErrorException();
@@ -160,22 +161,8 @@ void BitcoinExchange::ParseDB()
             continue;
         }
         arr = split(line, ',');
-        if (arr.size() > 2 || arr.size() < 2)
-        {
-            std::cout << "Error: bad database" << std::endl;
-            throw BitcoinExchange::FileErrorException();
-        }
-        if (!isvalidformat(arr[0]))
-            throw BitcoinExchange::FileErrorException();
         char *endptr;
         double num = std::strtod(arr[1].c_str(), &endptr);
-        if (*endptr != '\0')
-            throw BitcoinExchange::FileErrorException();
-        if (num < 0 || errno == ERANGE)
-        {
-            std::cout << "Error: database value overflow" << std::endl;
-            throw BitcoinExchange::FileErrorException();
-        }
         map[arr[0]] = num;
     }
 }

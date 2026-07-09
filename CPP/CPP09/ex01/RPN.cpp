@@ -12,12 +12,14 @@ RPN::~RPN()
 
 RPN::RPN(const RPN& copy)
 {
-    (void)copy;
+    if (this != &copy)
+        this->arr = copy.arr;
 }
 
 RPN& RPN::operator=(const RPN& other)
 {
-    (void)other;
+    if (this != &other)
+        this->arr = other.arr;
     return *this;
 }
 
@@ -39,19 +41,15 @@ void RPN::doop(std::string t)
 {
     std::stringstream ss(t);
     std::string s;
-    char *endptr;
     int n;
     int d;
     int res;
     while (ss >> s)
     {
         if (s.size() > 1)
-            throw std::invalid_argument("Invalid Number");
+            throw std::invalid_argument("Invalid Arg");
         if (!isvalid(s[0]))
-            throw std::invalid_argument("Invalid Number");
-        long check = strtol(s.c_str(), &endptr, 10);
-        if (check > __INT_MAX__ || check < -__INT_MAX__)
-            throw std::invalid_argument("Invalid Number");
+            throw std::invalid_argument("Invalid Arg");
         if (isdigit(s[0]))
             arr.push(s[0] - '0');
         if (isop(s[0]))

@@ -12,12 +12,20 @@ PmergeMe::~PmergeMe()
 
 PmergeMe::PmergeMe(const PmergeMe &other)
 {
-    (void)other;
+    if (this != &other)
+    {
+        this->vec = other.vec;
+        this->deq = other.deq;
+    }
 }   
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
-    (void)other;
+    if (this != &other)
+    {
+        this->vec = other.vec;
+        this->deq = other.deq;
+    }
     return *this;
 }
 
@@ -230,9 +238,10 @@ void PmergeMe::Fordalg(std::vector<int> &v)
     for (size_t i = 0; i < arr.size(); i++)
     {
         v.push_back(arr[i].front());
-        std::cout << v[i] << std::endl;
     }
 }
+
+
 
 void PmergeMe::Fordalg(std::deque<int> &t)
 {
@@ -251,8 +260,25 @@ void PmergeMe::Fordalg(std::deque<int> &t)
     for (size_t i = 0; i < arr.size(); i++)
     {
         t.push_back(arr[i].front());
-        std::cout << "deq : " << t[i] << std::endl;
     }
+}
+
+void PmergeMe::printvec()
+{
+    for (size_t i = 0; i < vec.size(); i++)
+    {
+        std::cout << vec[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void PmergeMe::printdeq()
+{
+    for (size_t i = 0; i < deq.size(); i++)
+    {
+        std::cout << deq[i] << " ";
+    }
+    std::cout << std::endl;
 }
 
 PmergeMe::PmergeMe(char **argv)
@@ -273,6 +299,25 @@ PmergeMe::PmergeMe(char **argv)
         deq.push_back(static_cast<int>(num));
         i++;
     }
+    std::vector<int> temp = vec;
+    std::sort(temp.begin(), temp.end());
+    std::vector<int>::iterator it = std::adjacent_find(temp.begin(), temp.end());
+    if (it != temp.end())
+        throw ParseErr();
+    std::cout << "Before : ";
+    printvec();
+    clock_t start = clock();
     Fordalg(vec);
+    clock_t end = clock();
+    double duration_us = (static_cast<double>(end - start) / CLOCKS_PER_SEC) * 1000000;
+    std::cout << "After : ";
+    printvec();
+    std::cout << "Time to process a range of " << vec.size() 
+    << " elements with std::vector : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
+    start = clock();
     Fordalg(deq);
+    end = clock();
+    duration_us = (static_cast<double>(end - start) / CLOCKS_PER_SEC) * 1000000;
+    std::cout << "Time to process a range of " << vec.size() 
+          << " elements with std::deque : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
 }
