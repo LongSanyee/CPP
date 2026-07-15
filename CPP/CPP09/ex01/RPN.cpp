@@ -44,6 +44,10 @@ void RPN::doop(std::string t)
     int n;
     int d;
     int res;
+    ss >> s;
+    if (ss.fail() || !ss.eof()){
+        throw std::invalid_argument("Invalid Arg");
+    }
     while (ss >> s)
     {
         if (s.size() > 1)

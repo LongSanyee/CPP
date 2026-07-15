@@ -107,15 +107,17 @@ void PmergeMe::Sortvec(std::vector<std::vector<int> > &t)
     std::vector<size_t> jacob;
     jacob.push_back(0);
     jacob.push_back(1);
-    size_t j_idx = 2;
+    size_t idx = 2;
     while (true)
     {
-        jacob.push_back(jacob[j_idx - 1] + 2 * jacob[j_idx - 2]);
+        jacob.push_back(jacob[idx - 1] + 2 * jacob[idx - 2]);
         if (jacob.back() > pend.size()) 
             break;
-        j_idx++;
+        idx++;
     }
-    std::vector<std::vector<int> > fakechain = mainchain;
+    std::vector<size_t> tracker(pend.size());
+    for (size_t i = 0; i < pend.size(); i++)
+        tracker[i] = i + 2;
     for (size_t i = 3; i < jacob.size(); i++)
     {
         int start = jacob[i] - 2;
@@ -126,10 +128,16 @@ void PmergeMe::Sortvec(std::vector<std::vector<int> > &t)
         {
             std::vector<std::vector<int> >::iterator it = mainchain.end();
             if (!(isodd && start == static_cast<int>(pend.size() - 1)))
-                it = std::find(mainchain.begin(), mainchain.end(), fakechain[start + 2]);
+                it = mainchain.begin() + tracker[start];
             std::vector<std::vector<int> >::iterator insert;
             insert = std::upper_bound(mainchain.begin(), it, pend[start], cmp);
+            size_t dist = std::distance(mainchain.begin(), insert);
             mainchain.insert(insert, pend[start]);
+            for (size_t k = 0; k < tracker.size(); k++)
+            {
+                if (tracker[k] >= dist)
+                    tracker[k]++;
+            }
             start--;
         }
     }
@@ -192,15 +200,17 @@ void PmergeMe::Sortdeq(std::deque<std::deque<int> > &t)
     std::deque<size_t> jacob;
     jacob.push_back(0);
     jacob.push_back(1);
-    size_t j_idx = 2;
+    size_t idx = 2;
     while (true)
     {
-        jacob.push_back(jacob[j_idx - 1] + 2 * jacob[j_idx - 2]);
+        jacob.push_back(jacob[idx - 1] + 2 * jacob[idx - 2]);
         if (jacob.back() > pend.size()) 
             break;
-        j_idx++;
+        idx++;
     }
-    std::deque<std::deque<int> > fakechain = mainchain;
+    std::deque<size_t> tracker(pend.size());
+    for (size_t i = 0; i < pend.size(); i++)
+        tracker[i] = i + 2;
     for (size_t i = 3; i < jacob.size(); i++)
     {
         int start = jacob[i] - 2;
@@ -211,10 +221,16 @@ void PmergeMe::Sortdeq(std::deque<std::deque<int> > &t)
         {
             std::deque<std::deque<int> >::iterator it = mainchain.end();
             if (!(isodd && start == static_cast<int>(pend.size() - 1)))
-                it = std::find(mainchain.begin(), mainchain.end(), fakechain[start + 2]);
+                it = mainchain.begin() + tracker[start];
             std::deque<std::deque<int> >::iterator insert;
             insert = std::upper_bound(mainchain.begin(), it, pend[start], comp);
+            size_t dist = std::distance(mainchain.begin(), insert);
             mainchain.insert(insert, pend[start]);
+            for (size_t k = 0; k < tracker.size(); k++)
+            {
+                if (tracker[k] >= dist) 
+                    tracker[k]++;
+            }
             start--;
         }
     }
@@ -321,3 +337,4 @@ PmergeMe::PmergeMe(char **argv)
     std::cout << "Time to process a range of " << vec.size() 
           << " elements with std::deque : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
 }
+

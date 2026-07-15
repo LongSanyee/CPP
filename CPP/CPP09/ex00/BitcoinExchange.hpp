@@ -4,8 +4,8 @@
 
 #include <cstdlib>
 #include <string>
-#include <vector>
 #include <map>
+#include <queue>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -30,7 +30,6 @@ public:
     int isleapyear(int y);
     int isfullmonth(int month);
     void InputValidator(std::ifstream &file);
-    std::vector<std::string> split(std::string t, char c);
 private:
     std::map<std::string, double> map;
 };

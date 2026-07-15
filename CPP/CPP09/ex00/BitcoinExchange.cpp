@@ -74,37 +74,40 @@ int BitcoinExchange::isvalidformat(std::string &format)
 void BitcoinExchange::InputValidator(std::ifstream &file)
 {
     std::string line;
-    std::vector<std::string> arr;
+    std::string date;
+    std::string value;
     bool i = 0;
     while (std::getline(file, line))
     {
         if (i == 0){
             i = 1;
+            if (line != "date | value")
+                throw std::invalid_argument("No Header in file !");
             continue;
         }
-        arr = split(line, '|');
-        if (arr.empty())
-            continue;
-        if (arr.size() > 2 || arr.size() < 2)
+        size_t pos = 0;
+        if ((pos = line.find("|")) != std::string::npos)
         {
-            if (arr.size() > 2)
-                std::cout << "Error: bad input => " << arr[2] << std::endl;
-            else if (arr.size() == 1)
-                std::cout << "Error: bad input => " << arr[0] << std::endl;
+            if ((line[pos - 1] && line[pos - 1] != ' ') || (line[pos + 1] && line[pos + 1] != ' '))
+            {
+                std::cout << "Error: bad input => " << line << std::endl;
+                continue;
+            }
+            date = line.substr(0, pos - 1);
+            value = line.substr(pos + 1, line.size() - 1 - pos + 1);
+        }
+        else
+        {
+            std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
-        size_t last = arr[0].find_last_not_of(" \t\r\n");
-        if (last != std::string::npos) 
-            arr[0] = arr[0].substr(0, last + 1);
-        if (!isvalidformat(arr[0]))
+        if (!isvalidformat(date))
         {
-            std::cout << "Error: bad input => " << arr[0] << std::endl;
+            std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
         char *endptr;
-        double num = std::strtod(arr[1].c_str(), &endptr);
-        while (*endptr != '\0' && std::isspace(*endptr))
-            endptr++;
+        double num = std::strtod(value.c_str(), &endptr);
         if (num < 0 || num > 1000)
         {
             if (num < 0)
@@ -120,10 +123,10 @@ void BitcoinExchange::InputValidator(std::ifstream &file)
         }
         if (*endptr != '\0')
         {
-            std::cout << "Error: bad input => " << arr[1] << std::endl;
+            std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
-        std::map<std::string, double>::iterator it = map.upper_bound(arr[0]);
+        std::map<std::string, double>::iterator it = map.upper_bound(date);
         if (it == map.begin())
         {
             std::cout << "Error: No match for date in database" << std::endl;
@@ -132,7 +135,7 @@ void BitcoinExchange::InputValidator(std::ifstream &file)
         --it;
         double f = it->second;
         double res = num * f;
-        std::cout << arr[0] << " => " << num << " = " << res << std::endl;
+        std::cout << date << " => " << num << " = " << res << std::endl;
     }
 }
 
@@ -147,12 +150,12 @@ BitcoinExchange::BitcoinExchange(std::string file)
 
 void BitcoinExchange::ParseDB()
 {
-    errno = 0;
     std::ifstream read("data.csv");;
     if (!read.is_open())
         throw BitcoinExchange::FileErrorException();
     std::string line;
-    std::vector<std::string> arr;
+    std::string date;
+    std::string value;
     bool i = 0;
     while (std::getline(read, line))
     {
@@ -160,27 +163,13 @@ void BitcoinExchange::ParseDB()
             i = 1;
             continue;
         }
-        arr = split(line, ',');
-        char *endptr;
-        double num = std::strtod(arr[1].c_str(), &endptr);
-        map[arr[0]] = num;
+        size_t pos = 0;
+        if ((pos = line.find(",")) != std::string::npos)
+        {
+            date = line.substr(0, pos);
+            value = line.substr(pos + 1, line.size() - 1 - pos + 1);
+        }
+        double num = std::strtod(value.c_str(), NULL);
+        map[date] = num;
     }
-}
-
-std::vector<std::string> BitcoinExchange::split(std::string t, char c)
-{
-    std::vector<std::string> arr;
-    size_t pos = 0;
-    size_t start = 0;
-
-    while ((pos = t.find(c, start)) != std::string::npos)
-    {
-        if (pos - start > 0)
-            arr.push_back(t.substr(start, pos - start));
-        start = pos + 1;
-    }
-    std::string tmp = t.substr(start);
-    if (!tmp.empty())
-        arr.push_back(t.substr(start));
-    return arr;
 }
