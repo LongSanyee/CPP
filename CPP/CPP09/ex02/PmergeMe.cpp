@@ -335,6 +335,6 @@ PmergeMe::PmergeMe(char **argv, int ac)
     Fordalg(deq);
     end = clock();
     duration_us = (static_cast<double>(end - start) / CLOCKS_PER_SEC) * 1000000;
-    std::cout << "Time to process a range of " << vec.size() 
+    std::cout << "Time to process a range of " << deq.size() 
           << " elements with std::deque : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
 }

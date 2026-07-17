@@ -156,7 +156,7 @@ BitcoinExchange::BitcoinExchange(std::string file)
 
 void BitcoinExchange::ParseDB()
 {
-    std::ifstream read("data.csv");;
+    std::ifstream read("data.csv");
     if (!read.is_open())
         throw BitcoinExchange::FileErrorException();
     std::string line;
