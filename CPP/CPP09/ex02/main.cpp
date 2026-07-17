@@ -10,7 +10,7 @@ int main(int ac, char **av)
     }
     try
     {
-       PmergeMe sort(av);
+       PmergeMe sort(av, ac);
     }
     catch(const std::exception& e)
     {

@@ -29,6 +29,11 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other)
     return *this;
 }
 
+const char * PmergeMe::ParseErr::what() const throw()
+{
+    return "Error: Parse Error !";
+}
+
 int valid(char *c)
 {
     int i = 0;
@@ -288,19 +293,10 @@ void PmergeMe::printvec()
     std::cout << std::endl;
 }
 
-void PmergeMe::printdeq()
+PmergeMe::PmergeMe(char **argv, int ac)
 {
-    for (size_t i = 0; i < deq.size(); i++)
-    {
-        std::cout << deq[i] << " ";
-    }
-    std::cout << std::endl;
-}
-
-PmergeMe::PmergeMe(char **argv)
-{
+    std::set<int> duplicate;
     int i = 1;
-    char *endptr;
     while (argv[i])
     {
         if (!valid(argv[i]))
@@ -308,21 +304,21 @@ PmergeMe::PmergeMe(char **argv)
         std::string tmp = argv[i];
         if (tmp.empty())
             throw ParseErr();
-        long num = std::strtol(argv[i], &endptr, 10);
+        long num = std::strtol(argv[i], NULL, 10);
         if (num < 0 || num > __INT_MAX__)
             throw ParseErr();
-        vec.push_back(static_cast<int>(num));
-        deq.push_back(static_cast<int>(num));
+        if (!duplicate.insert(static_cast<int>(num)).second)
+            throw ParseErr();
         i++;
     }
-    std::vector<int> temp = vec;
-    std::sort(temp.begin(), temp.end());
-    std::vector<int>::iterator it = std::adjacent_find(temp.begin(), temp.end());
-    if (it != temp.end())
-        throw ParseErr();
+    clock_t start = clock();
+    for (int i = 1; i < ac; i++)
+    {
+        long num = std::strtol(argv[i], NULL, 10);
+        vec.push_back(static_cast<int>(num));
+    }
     std::cout << "Before : ";
     printvec();
-    clock_t start = clock();
     Fordalg(vec);
     clock_t end = clock();
     double duration_us = (static_cast<double>(end - start) / CLOCKS_PER_SEC) * 1000000;
@@ -331,10 +327,14 @@ PmergeMe::PmergeMe(char **argv)
     std::cout << "Time to process a range of " << vec.size() 
     << " elements with std::vector : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
     start = clock();
+    for (int i = 1; i < ac; i++)
+    {
+        long num = std::strtol(argv[i], NULL, 10);
+        deq.push_back(static_cast<int>(num));
+    }
     Fordalg(deq);
     end = clock();
     duration_us = (static_cast<double>(end - start) / CLOCKS_PER_SEC) * 1000000;
     std::cout << "Time to process a range of " << vec.size() 
           << " elements with std::deque : " << std::fixed << std::setprecision(5) << duration_us << " us\n";
 }
-

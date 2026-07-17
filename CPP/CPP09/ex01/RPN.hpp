@@ -2,7 +2,6 @@
 #define RPN_HPP
 
 #include <stack>
-#include <vector>
 #include <sstream>
 #include <iostream>
 #include <cstdlib>

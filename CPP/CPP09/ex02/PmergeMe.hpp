@@ -2,12 +2,14 @@
 #define PMERGEME_HPP
 
 #include <vector>
-#include <sys/time.h>
+#include <ctime>
 #include <string>
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
-#include <queue>
+#include <cstdlib>
+#include <deque>
+#include <set>
 
 class PmergeMe
 {
@@ -16,17 +18,13 @@ public:
     ~PmergeMe();
     PmergeMe(const PmergeMe &other);
     PmergeMe &operator=(const PmergeMe& other);
-    PmergeMe(char **argv);
+    PmergeMe(char **argv, int ac);
     class ParseErr : public std::exception
     {
-        const char * what() const throw()
-        {
-            return "Error: Parse Error !";
-        }
+        const char * what() const throw();
     };
     void Fordalg(std::vector<int> &v);
     void printvec();
-    void printdeq();
     void Fordalg(std::deque<int> &t);
 private:
     std::vector<int> vec;

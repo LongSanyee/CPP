@@ -10,6 +10,11 @@ BitcoinExchange::~BitcoinExchange()
 
 }
 
+const char * BitcoinExchange::FileErrorException::what() const throw()
+{
+    return "Error: could not open file";
+}
+
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &copy)
 {
     if (this != &copy)
@@ -106,8 +111,14 @@ void BitcoinExchange::InputValidator(std::ifstream &file)
             std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
-        char *endptr;
-        double num = std::strtod(value.c_str(), &endptr);
+        std::stringstream t(value);
+        double num;
+        t >> num;
+        if (t.fail() || !t.eof() || isspace(value[1]))
+        {
+            std::cout << "Error: bad input => " << line << std::endl;
+            continue;
+        }
         if (num < 0 || num > 1000)
         {
             if (num < 0)
@@ -120,11 +131,6 @@ void BitcoinExchange::InputValidator(std::ifstream &file)
                 std::cout << "Error: too large a number." << std::endl;
                 continue;
             }
-        }
-        if (*endptr != '\0')
-        {
-            std::cout << "Error: bad input => " << line << std::endl;
-            continue;
         }
         std::map<std::string, double>::iterator it = map.upper_bound(date);
         if (it == map.begin())

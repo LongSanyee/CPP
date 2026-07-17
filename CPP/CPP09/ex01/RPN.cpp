@@ -1,4 +1,6 @@
 #include "RPN.hpp"
+#include <climits>
+
 
 RPN::RPN()
 {
@@ -41,13 +43,9 @@ void RPN::doop(std::string t)
 {
     std::stringstream ss(t);
     std::string s;
-    int n;
-    int d;
-    int res;
-    ss >> s;
-    if (ss.fail() || !ss.eof()){
-        throw std::invalid_argument("Invalid Arg");
-    }
+    long n = 0;
+    long d = 0;
+    long res = 0;
     while (ss >> s)
     {
         if (s.size() > 1)
@@ -70,27 +68,35 @@ void RPN::doop(std::string t)
                 {
                     case '*':
                         res = d * n;
+                        if (res > INT_MAX || res < INT_MIN)
+                            throw std::invalid_argument("Overflow");
                         arr.push(res);
                         break;
                     case '-':
                         res = d - n;
+                        if (res > INT_MAX || res < INT_MIN)
+                            throw std::invalid_argument("Overflow");
                         arr.push(res);
                         break;
                     case '+':
                         res = d + n;
+                        if (res > INT_MAX || res < INT_MIN)
+                            throw std::invalid_argument("Overflow");
                         arr.push(res);
                         break;
                     case '/':
                         if (n == 0)
                             throw std::invalid_argument("Division by zero");
                         res = d / n;
+                        if (res > INT_MAX || res < INT_MIN)
+                            throw std::invalid_argument("Overflow");
                         arr.push(res);
                         break;
                 }
             }
         }
     }
-    if (arr.size() > 1)
+    if (arr.size() != 1)
         throw std::invalid_argument("Invalid");
     std::cout << arr.top() << std::endl;
 }

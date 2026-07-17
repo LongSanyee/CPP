@@ -3,9 +3,9 @@
 
 
 #include <cstdlib>
+#include <sstream>
 #include <string>
 #include <map>
-#include <queue>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -20,10 +20,7 @@ public:
     BitcoinExchange(std::string file);
     class FileErrorException : public std::exception
     {
-        const char * what() const throw()
-        {
-            return "Error: could not open file";
-        }
+        const char * what() const throw();
     };
     int isvalidformat(std::string &format);
     void ParseDB();
